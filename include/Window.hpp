@@ -1,6 +1,9 @@
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_video.h>
-//getwindowfromid
+#include <SDL2/SDL_syswm.h>
+#include "Surface.hpp"
+#include "bool.hpp"
+#pragma once
+
 class Window {
     private:
         SDL_Window * window;
@@ -16,6 +19,9 @@ class Window {
         }
         int FlashOperation(SDL_FlashOperation operation){
             return SDL_FlashWindow(this->window, operation);
+        }
+        SDL_Window* Getraw() {
+            return this->window;
         }
         int GetBordersSize (int *top, int *left, int *bottom, int *right){
             return SDL_GetWindowBordersSize(this->window, top,left,bottom,right);
@@ -35,14 +41,14 @@ class Window {
         Uint32 GetFlags(){
             return SDL_GetWindowFlags(this->window);
         };
-        SDL_bool GetGrab(){
-            return SDL_GetWindowGrab(this->window);
+        bool GetGrab(){
+            return tobool(SDL_GetWindowGrab(this->window));
         }
-        SDL_bool GetKeyboardGrab(){
-            return SDL_GetWindowKeyboardGrab(this->window);
+        bool GetKeyboardGrab(){
+            return tobool(SDL_GetWindowKeyboardGrab(this->window));
         }
-        SDL_bool GetMouseGrab(){
-            return SDL_GetWindowMouseGrab(this->window);
+        bool GetMouseGrab(){
+            return tobool(SDL_GetWindowMouseGrab(this->window));
         }
         void GetPosition(int *x, int *y){
             SDL_GetWindowPosition(this->window, x, y);
@@ -53,8 +59,42 @@ class Window {
         const char* GetTitle(){
             return SDL_GetWindowTitle(this->window);
         }
+        void GetMaximumSize(int* w, int* h) {
+            SDL_GetWindowMaximumSize(this->window, w, h);
+        }
+        void GetMinimumSize(int* w, int* h) {
+            SDL_GetWindowMinimumSize(this->window, w, h);
+        }
+        const SDL_Rect* GetMouseRect() {
+            return SDL_GetWindowMouseRect(this->window);
+        }
+
         static Window GetWindowfromID(Uint32 id){
             return Window(SDL_GetWindowFromID(id));
+        }
+        int GetGammaRamp(Uint16* red, Uint16* green, Uint16* blue) {
+            return SDL_GetWindowGammaRamp(this->window, red, green, blue);
+        }
+        void* GetICCProfile(size_t * data) {
+            return SDL_GetWindowICCProfile(this->window, data);
+        }
+        Uint32 GetID() {
+            return SDL_GetWindowID(this->window);
+        }
+        int GetOpacity(float* out_opacity) {
+            return SDL_GetWindowOpacity(this->window, out_opacity);
+        }
+        Uint32 GetPixelFormat() {
+            return SDL_GetWindowPixelFormat(this->window);
+        }
+        void GetSizeInPixels(int* w, int* h) {
+            SDL_GetWindowSizeInPixels(this->window, w, h);
+        }
+        Surface GetSurface() {
+            return Surface(SDL_GetWindowSurface(this->window));
+        }
+        bool GetWMInfo(SDL_SysWMinfo* info) {
+            return tobool(SDL_GetWindowWMInfo(this->window, info));
         }
         void Hide(){
             SDL_HideWindow(this->window);
@@ -77,17 +117,17 @@ class Window {
         int SetFullscreen(Uint32 flags){
             return SDL_SetWindowFullscreen(this->window, flags);
         }
-        void SetGrab(SDL_bool grabbed){
-            SDL_SetWindowGrab(this->window, grabbed);
+        void SetGrab(bool grabbed){
+            SDL_SetWindowGrab(this->window, toSDLbool(grabbed));
         }
-        void SetKeyboardGrab(SDL_bool grabbed){
-            SDL_SetWindowKeyboardGrab(this->window, grabbed);
+        void SetKeyboardGrab(bool grabbed){
+            SDL_SetWindowKeyboardGrab(this->window,toSDLbool(grabbed));
         }
-        void SetMouseGrab(SDL_bool grabbed){
-            SDL_SetWindowMouseGrab(this->window, grabbed);
+        void SetMouseGrab(bool grabbed){
+            SDL_SetWindowMouseGrab(this->window, toSDLbool(grabbed));
         }
-        void SetIcon(SDL_Surface * icon){
-            SDL_SetWindowIcon(this->window, icon);
+        void SetIcon(Surface icon){
+            SDL_SetWindowIcon(this->window, icon.GetRaw());
         }
         void SetPosition(int x, int y){
             SDL_SetWindowPosition(this->window, x, y);
@@ -95,15 +135,52 @@ class Window {
         void SetSize(int w,int h){
             SDL_SetWindowSize(this->window, w, h);
         }
-        void SetBordered(SDL_bool bordered){
-            SDL_SetWindowBordered(this->window, bordered);
+        void SetBordered(bool bordered){
+            SDL_SetWindowBordered(this->window, toSDLbool(bordered));
         }
-        void SetResizable(SDL_bool resizable){
-            SDL_SetWindowResizable(this->window, resizable);
+        void SetResizable(bool resizable){
+            SDL_SetWindowResizable(this->window, toSDLbool(resizable));
         }
         void SetTitle(const char *title){
             SDL_SetWindowTitle(this->window,title);
         }
+        void SetAlwaysOnTop(bool on_top) {
+            SDL_SetWindowAlwaysOnTop(this->window, toSDLbool(on_top));
+        }
+        int SetBrightness(float brightness) {
+            return SDL_SetWindowBrightness(this->window, brightness);
+        }
+        int SetDisplayMode(const SDL_DisplayMode* mode) {
+            return SDL_SetWindowDisplayMode(this->window, mode);
+        }
+        int SetGammaRamp(const Uint16* red, const Uint16* green, const Uint16* blue) {
+            return SDL_SetWindowGammaRamp(this->window, red, green, blue);
+        }
+        int SetHitTest(SDL_HitTest callback, void* callback_data) {
+            return SDL_SetWindowHitTest(this->window, callback, callback_data);
+        }
+        int SetInputFocus() {
+            return SDL_SetWindowInputFocus(this->window);
+        }
+        void SetMaximumSize(int max_w, int max_h) {
+            SDL_SetWindowMaximumSize(this->window,max_w, max_h);
+        }
+        void SetMinimumSize(int min_w, int min_h) {
+            SDL_SetWindowMinimumSize(this->window, min_w, min_h);
+        }
+        int SetModalFor(Window parent_window) {
+            return SDL_SetWindowModalFor(this->window,parent_window.Getraw());
+        }
+        int SetMouseRect(const SDL_Rect* rect) {
+            return SDL_SetWindowMouseRect(this->window, rect);
+        }
+        int SetOpacity(float opacity){
+            return SDL_SetWindowOpacity(this->window, opacity);
+        }
+        int SetShape(SDL_Surface* shape, SDL_WindowShapeMode* shape_mode) {
+            return SDL_SetWindowShape(this->window, shape, shape_mode);
+        }
+       
         void Show(){
             SDL_ShowWindow(this->window);
         }
