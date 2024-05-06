@@ -1,8 +1,9 @@
-#include "Renderer.hpp"
+
 #include <SDL2/SDL.h>
 #pragma once
 
 namespace SDL_OOP{
+	class Renderer;
 	class Texture {
 	private:
 		SDL_Texture* texture;
@@ -19,9 +20,14 @@ namespace SDL_OOP{
 		SDL_Texture* GetRaw() {
 			return this->texture;
 		}	
-		void Lock(SDL_Rect *rect) {
-			SDL_LockTexture(this->texture,rect,this->pixels, &this->pitch);
-			
+		int Lock(SDL_Rect *rect) {
+			if (this->GetAccess() == SDL_TEXTUREACCESS_STREAMING) {
+				SDL_LockTexture(this->texture, rect, this->pixels, &this->pitch);
+				return 1;
+			}
+			else {
+				return 0;
+			}
 		}
 		void UnLock() {
 			SDL_UnlockTexture(this->texture);
