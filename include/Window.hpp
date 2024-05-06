@@ -3,8 +3,8 @@
 #include "Surface.hpp"
 #include "bool.hpp"
 #pragma once
-
-class Window {
+namespace SDL_OOP{
+    class Window {
     private:
         SDL_Window * window;
     public:
@@ -42,13 +42,13 @@ class Window {
             return SDL_GetWindowFlags(this->window);
         };
         bool GetGrab(){
-            return tobool(SDL_GetWindowGrab(this->window));
+            return Bool (SDL_GetWindowGrab(this->window));
         }
         bool GetKeyboardGrab(){
-            return tobool(SDL_GetWindowKeyboardGrab(this->window));
+            return CastBool::toBool(SDL_GetWindowKeyboardGrab(this->window));
         }
         bool GetMouseGrab(){
-            return tobool(SDL_GetWindowMouseGrab(this->window));
+            return CastBool::toBool(SDL_GetWindowMouseGrab(this->window));
         }
         void GetPosition(int *x, int *y){
             SDL_GetWindowPosition(this->window, x, y);
@@ -94,7 +94,7 @@ class Window {
             return Surface(SDL_GetWindowSurface(this->window));
         }
         bool GetWMInfo(SDL_SysWMinfo* info) {
-            return tobool(SDL_GetWindowWMInfo(this->window, info));
+            return CastBool::toBool(SDL_GetWindowWMInfo(this->window, info));
         }
         void Hide(){
             SDL_HideWindow(this->window);
@@ -118,13 +118,13 @@ class Window {
             return SDL_SetWindowFullscreen(this->window, flags);
         }
         void SetGrab(bool grabbed){
-            SDL_SetWindowGrab(this->window, toSDLbool(grabbed));
+            SDL_SetWindowGrab(this->window, CastBool::toSDLBool(grabbed));
         }
         void SetKeyboardGrab(bool grabbed){
-            SDL_SetWindowKeyboardGrab(this->window,toSDLbool(grabbed));
+            SDL_SetWindowKeyboardGrab(this->window,CastBool::toSDLBool(grabbed));
         }
         void SetMouseGrab(bool grabbed){
-            SDL_SetWindowMouseGrab(this->window, toSDLbool(grabbed));
+            SDL_SetWindowMouseGrab(this->window, CastBool::toSDLBool(grabbed));
         }
         void SetIcon(Surface icon){
             SDL_SetWindowIcon(this->window, icon.GetRaw());
@@ -136,16 +136,16 @@ class Window {
             SDL_SetWindowSize(this->window, w, h);
         }
         void SetBordered(bool bordered){
-            SDL_SetWindowBordered(this->window, toSDLbool(bordered));
+            SDL_SetWindowBordered(this->window, CastBool::toSDLBool(bordered));
         }
         void SetResizable(bool resizable){
-            SDL_SetWindowResizable(this->window, toSDLbool(resizable));
+            SDL_SetWindowResizable(this->window, CastBool::toSDLBool(resizable));
         }
         void SetTitle(const char *title){
             SDL_SetWindowTitle(this->window,title);
         }
         void SetAlwaysOnTop(bool on_top) {
-            SDL_SetWindowAlwaysOnTop(this->window, toSDLbool(on_top));
+            SDL_SetWindowAlwaysOnTop(this->window, CastBool::toSDLBool(on_top));
         }
         int SetBrightness(float brightness) {
             return SDL_SetWindowBrightness(this->window, brightness);
@@ -177,8 +177,8 @@ class Window {
         int SetOpacity(float opacity){
             return SDL_SetWindowOpacity(this->window, opacity);
         }
-        int SetShape(SDL_Surface* shape, SDL_WindowShapeMode* shape_mode) {
-            return SDL_SetWindowShape(this->window, shape, shape_mode);
+        int SetShape(Surface* shape, SDL_WindowShapeMode* shape_mode) {
+            return SDL_SetWindowShape(this->window, shape->GetRaw(), shape_mode);
         }
        
         void Show(){
@@ -188,4 +188,5 @@ class Window {
             SDL_DestroyWindow(this->window);
         }
 
-};
+    };
+} ;

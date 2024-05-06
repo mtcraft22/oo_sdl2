@@ -1,3 +1,14 @@
 #include <SDL2/SDL.h>
-#define toSDLbool(x) x?SDL_TRUE:SDL_FALSE
-#define tobool(x) x==1?true:false
+#include <SDL2/SDL_stdinc.h>
+namespace SDL_OOP {
+    class CastBool {
+        public:
+            static bool toBool(SDL_bool x){
+                return x==1?true:false;
+            }
+            static SDL_bool toSDLBool(bool x){
+                return x?SDL_TRUE:SDL_FALSE;
+            }
+    };
+    
+}

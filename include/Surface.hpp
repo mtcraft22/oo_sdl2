@@ -1,7 +1,12 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_error.h>
+#include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_syswm.h>
+#include <cstddef>
 #pragma once
-class Surface {
+namespace SDL_OOP{
+	class Surface {
 	private:
 		SDL_Surface* surface;
 		void* pixels = NULL;
@@ -41,6 +46,7 @@ class Surface {
 			}
 			else {
 				return NULL;
+				SDL_SetError("Not loked Surface!! use Lock()");
 			}
 		}
 		void GetDimensions(int* w, int* h,int* pitch) {
@@ -51,4 +57,9 @@ class Surface {
 		void Setpixels(void* pixels) {
 			this->surface->pixels = pixels;
 		}
+		void blit(Surface dest,SDL_Rect *src = NULL,SDL_Rect *dst = NULL ){
+			SDL_BlitSurface(this->surface,src,dest.GetRaw(),dst);
+		}
+		
 };
+}
