@@ -1,6 +1,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_surface.h>
 #include <cstddef>
+#include "Surface.hpp"
 #include "Texture.hpp"
 #include "Window.hpp"
 #pragma once
@@ -26,6 +28,7 @@ namespace SDL_OOP {
 		void present(){
 			SDL_RenderPresent(this->renderer);
 		}
+		
 		SDL_Renderer * GetRaw(){return this->renderer;}
 };
 }

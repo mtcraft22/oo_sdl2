@@ -9,8 +9,18 @@
 #pragma once
 namespace SDL_OOP {
     class SDL {
-        static void init_all();
-        static void PrintError();
-        static void quit();
+        public:
+        static void init_all(){
+            if(!SDL_Init(SDL_INIT_EVERYTHING)){
+                PrintError();
+                exit(-1);
+            }
+        }
+        static void PrintError(){
+            std::cout << SDL_GetError();
+        }
+        static void quit(){
+            SDL_Quit();
+        }
     };
 }

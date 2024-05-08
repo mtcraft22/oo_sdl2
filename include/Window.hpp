@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_syswm.h>
 #include "Surface.hpp"
 #include "bool.hpp"
@@ -17,6 +18,7 @@ namespace SDL_OOP{
         Window (SDL_Window * window){
             this->window = window;
         }
+        
         int FlashOperation(SDL_FlashOperation operation){
             return SDL_FlashWindow(this->window, operation);
         }
